@@ -14,6 +14,6 @@ class Character extends MovableObject {
         this.y -= 100;
         setTimeout(() => {
             this.y += 100;
-        }, 300)
+        },150)
     }
 }
