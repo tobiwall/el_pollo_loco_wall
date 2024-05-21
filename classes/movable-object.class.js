@@ -1,34 +1,34 @@
-class MovableObject {
-  x = 120;
-  y = 150;
-  img;
-  imageCache = {};
-  currentImage = 0;
+class MovableObject extends DrawableObject {
   speed = 0.15;
   otherDirection = false;
   speedY = 0;
   acceleration = 2;
   offsety = 0;
+  isCollidingEnemy = false;
+  isCatchingCoin = false;
+  lastHit = 0;
 
-  draw(ctx) {
-    ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+  jump() {
+    this.speedY = 30;
   }
 
-  drawFrame(ctx) {
-    if (this instanceof Character || this instanceof Chicken || this instanceof ChickenSmall) {
-      ctx.beginPath();
-      ctx.lineWidth = "5";
-      ctx.strokeStyle = "blue";
-      ctx.rect(this.x, this.y, this.width, this.height);
-      ctx.stroke();
+  isColliding(obj) {
+    return (
+      this.x + this.width >= obj.x &&
+      this.x <= obj.x + obj.width &&
+      this.y + this.offsety + this.height >= obj.y &&
+      this.y + this.offsety <= obj.y + obj.height
+    );
+  }
+
+  hit() {
+    this.energy -= 5;
+    if (this.energy < 0) {
+      this.energy = 0;
+    } else {
+      this.lastHit = new Date().getTime();
     }
   }
-
-  isColliding (obj) {
-    return  (this.x + this.width) >= obj.x && this.x <= (obj.x + obj.width) && 
-            (this.y + this.offsety + this.height) >= obj.y &&
-            (this.y + this.offsety) <= (obj.y + obj.height)
-}
 
   applyGravity() {
     setInterval(() => {
@@ -41,19 +41,6 @@ class MovableObject {
 
   isAboveGround() {
     return this.y < 150;
-  }
-
-  loadImage(path) {
-    this.img = new Image();
-    this.img.src = path;
-  }
-
-  loadImages(arr) {
-    arr.forEach((path) => {
-      let img = new Image();
-      img.src = path;
-      this.imageCache[path] = img;
-    });
   }
 
   playAnimation(images) {
@@ -70,4 +57,19 @@ class MovableObject {
   moveLeft() {
     this.x -= this.speed;
   }
+
+
+  /*drawFrame(ctx) {
+    if (
+      this instanceof Character ||
+      this instanceof Chicken ||
+      this instanceof ChickenSmall
+    ) {
+      ctx.beginPath();
+      ctx.lineWidth = "5";
+      ctx.strokeStyle = "blue";
+      ctx.rect(this.x, this.y, this.width, this.height);
+      ctx.stroke();
+    }
+  }*/
 }
