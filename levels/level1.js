@@ -45,4 +45,7 @@ const level1 = new Level(
         new BackgroundObjekt('img/5_background/layers/2_second_layer/2.png', 719*3),
         new BackgroundObjekt('img/5_background/layers/1_first_layer/2.png', 719*3),
       ],
+    [
+        new ThrowableObject()
+    ]
     );

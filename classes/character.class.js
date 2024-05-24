@@ -82,6 +82,13 @@ class Character extends MovableObject {
     "img/2_character_pepe/5_dead/D-56.png",
     "img/2_character_pepe/5_dead/D-56.png",
     "img/2_character_pepe/5_dead/D-56.png",
+    "img/2_character_pepe/5_dead/D-56.png",
+    "img/2_character_pepe/5_dead/D-56.png",
+    "img/2_character_pepe/5_dead/D-56.png",
+    "img/2_character_pepe/5_dead/D-56.png",
+    "img/2_character_pepe/5_dead/D-56.png",
+    "img/2_character_pepe/5_dead/D-56.png",
+    "img/2_character_pepe/5_dead/D-56.png",
     "img/2_character_pepe/5_dead/D-57.png",
     "img/2_character_pepe/5_dead/D-57.png",
     "img/2_character_pepe/5_dead/D-57.png",
@@ -113,7 +120,7 @@ class Character extends MovableObject {
         this.otherDirection = false;
         this.walking_sound.play();
       }
-      if (this.world.keyboard.LEFT && this.x > 0) {
+      if (this.world.keyboard.LEFT && this.x > -520) {
         this.moveLeft();
         this.otherDirection = true;
         this.walking_sound.play();
@@ -123,9 +130,8 @@ class Character extends MovableObject {
         this.jump_sound.play();
       }
       if (this.world.keyboard.SPACE) {
-        this.gamePause();
       }
-      this.world.camera_x = -this.x + 120;
+      this.world.camera_x = -this.x + 180;
     }, 1000 / 60);
 
     setInterval(() => {
@@ -152,11 +158,6 @@ class Character extends MovableObject {
       this.walking_sound.pause();
       this.world.clearAllIntervals();
     }, 1400);
-  }
-
-  gamePause() {
-    this.walking_sound.pause();
-    this.world.clearAllIntervals();
   }
 
   isHurt() {

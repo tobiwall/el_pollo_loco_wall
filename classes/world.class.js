@@ -1,6 +1,6 @@
 class World {
   character = new Character();
-  statusbar = new Statusbar();
+  statusbars = [];
   level = level1;
 
 
@@ -16,9 +16,17 @@ class World {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
+    this.addStatusbars();
     this.draw();
     this.setWorld();
     this.checkCollision();
+  }
+
+  addStatusbars() {
+    this.statusbars.push(new Statusbar('energy'));
+    this.statusbars.push(new Statusbar('coins'));
+    this.statusbars.push(new Statusbar('bottle'));
+    this.statusbars.push(new Statusbar('endboss'));
   }
 
   setWorld() {
@@ -30,7 +38,7 @@ class World {
       this.level.enemies.forEach((enemy) => {
         if (this.character.isColliding(enemy)) {
           this.character.hit();
-          this.statusbar.setStatusBarPercent(this.character.energy);
+          this.statusbars[0].setStatusBarPercent(this.character.energy);
         }
       });
       /*this.level.coins.forEach((coin) => {
@@ -51,10 +59,13 @@ class World {
     if (!this.gameIsOver) {
       this.addToMap(this.character);
       this.addObjectToMap(this.level.coins);
+      this.addObjectToMap(this.level.throwableObject);
       this.addObjectToMap(this.level.enemies);
     }
     this.ctx.translate(-this.camera_x, 0);
-    this.addToMap(this.statusbar);
+    this.statusbars.forEach(statusbar => {
+        this.addToMap(statusbar);
+      });
 
     let self = this;
     requestAnimationFrame(function () {
