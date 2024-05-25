@@ -58,13 +58,13 @@ class Statusbar extends DrawableObject {
     if (statusBar == "endboss") {
       this.x = 10;
       this.y = 170;
-      this.setStatusBarEndboss();
+      this.setStatusBarEndboss(100);
     }
   }
 
   setStatusBarPercent(percent) {
     this.percent = percent;
-    let path = this.IMAGE_ENERGY[this.checkPercent()];
+    let path = this.IMAGE_ENERGY[this.checkPercent(this.percent)];
     this.img = this.imageCache[path];
   }
 
@@ -78,21 +78,21 @@ class Statusbar extends DrawableObject {
     this.img = this.imageCache[path];
   }
 
-  setStatusBarEndboss() {
-    let path = this.IMAGE_ENDBOSS[5];
+  setStatusBarEndboss(percent) {
+    let path = this.IMAGE_ENDBOSS[this.checkPercent(percent)];
     this.img = this.imageCache[path];
   }
 
-  checkPercent() {
-    if (this.percent == 100) {
+  checkPercent(percent) {
+    if (percent == 100) {
       return 5;
-    } else if (this.percent > 80) {
+    } else if (percent > 80) {
       return 4;
-    } else if (this.percent > 60) {
+    } else if (percent > 60) {
       return 3;
-    } else if (this.percent > 40) {
+    } else if (percent > 40) {
       return 2;
-    } else if (this.percent > 20) {
+    } else if (percent > 20) {
       return 1;
     } else {
       return 0;

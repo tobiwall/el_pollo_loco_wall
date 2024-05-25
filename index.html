@@ -19,6 +19,7 @@
     <script src="./classes/statusbar.class.js"></script>
     <script src="./classes/throwable-object.class.js"></script>
     <script src="./levels/level1.js"></script>
+    <script src="./classes/endscreen.class.js"></script>
     <script src="./js/game.js"></script>
 
     <link rel="stylesheet" href="./style.css">
@@ -35,6 +36,10 @@
         </div>
         <button onclick="stopAndPlayMusik()" class="volume-on"><img id="volume-on" src="./img/icons/volume-on.png" alt=""><img class="d-none" id="volume-off" src="./img/icons/volume-off.png" alt=""></button>
         <canvas class="d-none" id="canvas" width="705" height="480">
+        <div id="end-screen" class="d-none">
+            <img src="./img/5_background/first_half_background.png" alt="">
+            <img src="./img/9_intro_outro_screens/game_over/game over.png" alt="">
+        </div>
     </div>
 
     </canvas>
