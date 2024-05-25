@@ -12,18 +12,19 @@ class Endscreen extends DrawableObject {
     "img/9_intro_outro_screens/win/win_2.png"
   ];
 
-  constructor(character) {
+  constructor(character, world) {
     super().loadImages(this.IMAGE_GAMEOVER);
     this.loadImages(this.IMAGE_WIN);
-    this.animateEndscreen(character);
+    this.animateEndscreen(character, world);
   }
 
-  animateEndscreen(character) {
+  animateEndscreen(character, world) {
     setInterval(() => {
+      let boss = world.hitEndboss;
       if (character.energy == 0) {
         let path = this.IMAGE_GAMEOVER;
         this.img = this.imageCache[path];
-      } else {
+      } else if (boss <= 0) {
         let path = this.IMAGE_WIN;
         this.img = this.imageCache[path];
       }

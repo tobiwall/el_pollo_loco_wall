@@ -2,15 +2,16 @@ class World {
   character = new Character();
   statusbars = [];
   level = level1;
-  endscreen = new Endscreen(this.character);
+  hitEndboss = 100;
+  endscreen = new Endscreen(this.character, this);
   throwableObject = [];
+  SOUND_WIN = new Audio('audio/win.mp3');
 
   ctx;
   canvas;
   keyboard;
   camera_x = 0;
   colisionIntervall;
-  hitEndboss = 100;
   bottleHit = false;
   isGameOver = false;
 
@@ -65,7 +66,6 @@ class World {
           if (bottle.isColliding(enemy)) {
 
 
-
             if (enemy instanceof Endboss && !this.bottleHit) {
                 this.bottleHit = true;
                 this.hitEndboss -= 20;
@@ -76,6 +76,11 @@ class World {
               if (this.hitEndboss == 0) {
                 setTimeout(() => {
                     this.level.enemies.splice(index, 1);
+                    this.gameIsOver = true;
+                    this.SOUND_WIN.play();
+                    setTimeout(() => {
+                        window.location.href = "index.html";
+                    }, 7000)
                 }, 1000)
               }
 

@@ -3,15 +3,16 @@ let world;
 let keyboard = new Keyboard();
 let BACKGROUND_MUSIK = new Audio("audio/background.mp3");
 let musikInterval;
-let fadeDuration = 6; // Dauer des Fade-Outs in Sekunden
-let endTime = 57; // Ende der Musikschleife in Sekunden
-let fadeStartTime = endTime - fadeDuration; // Zeitpunkt, ab dem das Fade-Out beginnt
+let fadeDuration = 6;
+let endTime = 57;
+let fadeStartTime = endTime - fadeDuration;
 let fadeInterval;
 let backgroundMusikVolumen = 0.3;
 let changeVolumenOn21sec = false;
 let fadingStarted = false;
 let reducedVolumen = backgroundMusikVolumen - 0.1;
 let musikStoped = false;
+let lastKeyPressTime = Date.now();
 
 function init() {
   document.getElementById("start-img").classList.add("d-none");
@@ -19,6 +20,9 @@ function init() {
   playBackgroundMusik(backgroundMusikVolumen, reducedVolumen);
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
+  setInterval(() => {
+    checkKeyPress();
+  }, 1000);
 }
 
 function playBackgroundMusik(vol1, vol2) {
@@ -42,16 +46,16 @@ function playBackgroundMusik(vol1, vol2) {
 }
 
 function stopAndPlayMusik() {
-    let on = document.getElementById('volume-on');
-    let off = document.getElementById('volume-off');
+  let on = document.getElementById("volume-on");
+  let off = document.getElementById("volume-off");
   if (musikStoped) {
-    off.classList.add('d-none');
-    on.classList.remove('d-none');
+    off.classList.add("d-none");
+    on.classList.remove("d-none");
     musikStoped = false;
     playBackgroundMusik(backgroundMusikVolumen, reducedVolumen);
   } else {
-    on.classList.add('d-none');
-    off.classList.remove('d-none');
+    on.classList.add("d-none");
+    off.classList.remove("d-none");
     BACKGROUND_MUSIK.pause();
     musikStoped = true;
   }
@@ -95,6 +99,8 @@ function startVolumeFade() {
 
 window.addEventListener("keydown", (e) => {
   let key = e.keyCode;
+  lastKeyPressTime = Date.now();
+
   if (key == 37) {
     keyboard.LEFT = true;
   }
@@ -136,3 +142,12 @@ window.addEventListener("keyup", (e) => {
     keyboard.D = false;
   }
 });
+
+function checkKeyPress() {
+  let currentTime = Date.now();
+  if (currentTime - lastKeyPressTime >= 5000) {
+    world.character.checkCharacterAction();
+  } else {
+    world.character.snorring_sound.pause();
+  }
+}

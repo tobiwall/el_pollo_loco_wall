@@ -62,6 +62,13 @@ class MovableObject extends DrawableObject {
     this.x -= this.speed;
   }
 
+  animate(image) {
+    setInterval(() => {
+        this.moveLeft();
+        this.playAnimation(image);
+    }, 100);
+  }
+
   /*drawFrame(ctx) {
     if (
       this instanceof Character ||
