@@ -7,6 +7,7 @@ class MovableObject extends DrawableObject {
   isCollidingEnemy = false;
   isCatchingCoin = false;
   lastHit = 0;
+  moveLeftIntervall;
 
   jump() {
     this.speedY = 30;
@@ -63,7 +64,7 @@ class MovableObject extends DrawableObject {
   }
 
   animate(image) {
-    setInterval(() => {
+    this.moveLeftIntervall = setInterval(() => {
         this.moveLeft();
         this.playAnimation(image);
     }, 100);

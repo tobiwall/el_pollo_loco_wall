@@ -5,7 +5,7 @@ class World {
   hitEndboss = 100;
   endscreen = new Endscreen(this.character, this);
   throwableObject = [];
-  SOUND_WIN = new Audio('audio/win.mp3');
+  SOUND_WIN = new Audio("audio/win.mp3");
 
   ctx;
   canvas;
@@ -39,13 +39,14 @@ class World {
   run() {
     this.colisionIntervall = setInterval(() => {
       this.checkColision();
+      //this.checkEndbossColision();
       this.checkThrowObjects();
     }, 100);
   }
 
   checkThrowObjects() {
     if (this.keyboard.D) {
-        this.bottleHit = false;
+      this.bottleHit = false;
       let bottle = new ThrowableObject(
         this.character.x + 80,
         this.character.y + 120,
@@ -57,45 +58,64 @@ class World {
 
   checkColision() {
     this.level.enemies.forEach((enemy, index) => {
-      if (this.character.isColliding(enemy)) {
-        this.character.hit();
-        this.statusbars[0].setStatusBarPercent(this.character.energy);
-      }
-      if (this.throwableObject.length !== 0) {
-        this.throwableObject.forEach((bottle) => {
-          if (bottle.isColliding(enemy)) {
-
-
-            if (enemy instanceof Endboss && !this.bottleHit) {
-                this.bottleHit = true;
-                this.hitEndboss -= 20;
-                this.statusbars[3].setStatusBarEndboss(this.hitEndboss);
-
-
-
-              if (this.hitEndboss == 0) {
-                setTimeout(() => {
-                    this.level.enemies.splice(index, 1);
-                    this.gameIsOver = true;
-                    this.SOUND_WIN.play();
-                    setTimeout(() => {
-                        window.location.href = "index.html";
-                    }, 7000)
-                }, 1000)
-              }
-
-
-
-            } else if (!(enemy instanceof Endboss)) {
-                enemy.animate(enemy.IMAGES_DEAD);
-                setTimeout(() => {
-                    this.level.enemies.splice(index, 1);
-                }, 1000)
-            }
-          }
-        });
-      }
+      this.colisionCharacterEnemy(enemy);
+      this.colisionBottleEnemy(enemy, index);
     });
+    this.level.endBoss.forEach((boss) => {
+      this.colisionCharacterEnemy(boss);
+      this.colisionBottleEnemy(boss, 0);
+    });
+  }
+
+  colisionCharacterEnemy(enemy) {
+    if (this.character.isColliding(enemy)) {
+      this.character.hit();
+      this.statusbars[0].setStatusBarPercent(this.character.energy);
+    }
+  }
+
+  colisionBottleEnemy(enemy, index) {
+    if (this.throwableObject.length !== 0) {
+      this.throwableObject.forEach((bottle) => {
+        if (bottle.isColliding(enemy)) {
+          if (enemy instanceof Endboss) {
+            this.hurtEndboss(enemy);
+            this.endbossDead(enemy);
+          } else {
+            clearInterval(enemy.moveLeftIntervall);
+            enemy.animate(enemy.IMAGES_DEAD);
+            setTimeout(() => {
+              this.level.enemies.splice(index, 1);
+            }, 1000);
+          }
+        }
+      });
+    }
+  }
+
+  hurtEndboss(enemy) {
+    if (!this.bottleHit) {
+      this.bottleHit = true;
+      this.hitEndboss -= 20;
+      clearInterval(enemy.moveLeftIntervall);
+      enemy.animate(enemy.IMAGES_HURT);
+      this.statusbars[3].setStatusBarEndboss(this.hitEndboss);
+    }
+  }
+
+  endbossDead(enemy) {
+    if (this.hitEndboss == 0) {
+        clearInterval(enemy.moveLeftIntervall);
+        enemy.animateBossDead(enemy.IMAGES_DEAD);
+      setTimeout(() => {
+        this.level.endBoss.splice(0, 1);
+        this.gameIsOver = true;
+        this.SOUND_WIN.play();
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 7000);
+      }, 2000);
+    }
   }
 
   draw() {
@@ -110,6 +130,7 @@ class World {
       this.addObjectToMap(this.level.coins);
       this.addObjectToMap(this.throwableObject);
       this.addObjectToMap(this.level.enemies);
+      this.addObjectToMap(this.level.endBoss);
     }
     this.ctx.translate(-this.camera_x, 0);
     if (!this.gameIsOver) {
