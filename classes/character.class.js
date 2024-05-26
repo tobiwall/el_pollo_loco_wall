@@ -100,16 +100,16 @@ class Character extends MovableObject {
   ];
 
   IMAGES_SLEEP = [
-    'img/2_character_pepe/1_idle/long_idle/I-11.png',
-    'img/2_character_pepe/1_idle/long_idle/I-12.png',
-    'img/2_character_pepe/1_idle/long_idle/I-13.png',
-    'img/2_character_pepe/1_idle/long_idle/I-14.png',
-    'img/2_character_pepe/1_idle/long_idle/I-15.png',
-    'img/2_character_pepe/1_idle/long_idle/I-16.png',
-    'img/2_character_pepe/1_idle/long_idle/I-17.png',
-    'img/2_character_pepe/1_idle/long_idle/I-18.png',
-    'img/2_character_pepe/1_idle/long_idle/I-19.png',
-    'img/2_character_pepe/1_idle/long_idle/I-20.png'
+    "img/2_character_pepe/1_idle/long_idle/I-11.png",
+    "img/2_character_pepe/1_idle/long_idle/I-12.png",
+    "img/2_character_pepe/1_idle/long_idle/I-13.png",
+    "img/2_character_pepe/1_idle/long_idle/I-14.png",
+    "img/2_character_pepe/1_idle/long_idle/I-15.png",
+    "img/2_character_pepe/1_idle/long_idle/I-16.png",
+    "img/2_character_pepe/1_idle/long_idle/I-17.png",
+    "img/2_character_pepe/1_idle/long_idle/I-18.png",
+    "img/2_character_pepe/1_idle/long_idle/I-19.png",
+    "img/2_character_pepe/1_idle/long_idle/I-20.png",
   ];
 
   world;
@@ -132,13 +132,16 @@ class Character extends MovableObject {
     this.animateCharacter();
     this.addLife();
     this.applyGravity();
-    this.checkCharacterAction();
   }
 
   checkCharacterAction() {
-    this.playAnimation(this.IMAGES_SLEEP);
-    this.snorring_sound.volume = 0.1;
-    this.snorring_sound.play();
+    if (this.isHurt() || this.isDead()) {
+        this.snorring_sound.pause();
+    } else {
+      this.playAnimation(this.IMAGES_SLEEP);
+      this.snorring_sound.volume = 0.1;
+      this.snorring_sound.play();
+    }
   }
 
   animateCharacter() {

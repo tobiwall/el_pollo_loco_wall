@@ -20,9 +20,11 @@ function init() {
   playBackgroundMusik(backgroundMusikVolumen, reducedVolumen);
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
-  setInterval(() => {
-    checkKeyPress();
-  }, 1000);
+  setTimeout(() => {
+    setInterval(() => {
+      checkKeyPress();
+    }, 1000);
+  }, 5000);
 }
 
 function playBackgroundMusik(vol1, vol2) {
