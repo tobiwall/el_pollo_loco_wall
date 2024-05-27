@@ -14,6 +14,7 @@ class World {
   colisionIntervall;
   bottleHit = false;
   isGameOver = false;
+  killEnemy = false;
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -58,7 +59,7 @@ class World {
 
   checkColision() {
     this.level.enemies.forEach((enemy, index) => {
-      this.colisionCharacterEnemy(enemy);
+      this.colisionCharacterEnemy(enemy, index);
       this.colisionBottleEnemy(enemy, index);
     });
     this.level.endBoss.forEach((boss) => {
@@ -67,10 +68,20 @@ class World {
     });
   }
 
-  colisionCharacterEnemy(enemy) {
+  colisionCharacterEnemy(enemy, index) {
     if (this.character.isColliding(enemy)) {
-      this.character.hit();
-      this.statusbars[0].setStatusBarPercent(this.character.energy);
+      if (this.character.isAboveGround() && this.character.speedY < 0 && !(enemy instanceof Endboss)) {
+        this.chickenKilled(enemy, index);
+        this.character.speedY = 20;
+        this.killEnemy = true;
+        setTimeout(() => {
+            this.killEnemy = false;
+        }, 1000);
+        
+      } else if (!this.killEnemy) {
+        this.character.hit();
+        this.statusbars[0].setStatusBarPercent(this.character.energy);
+      }
     }
   }
 
@@ -82,15 +93,21 @@ class World {
             this.hurtEndboss(enemy);
             this.endbossDead(enemy);
           } else {
-            clearInterval(enemy.moveLeftIntervall);
-            enemy.animate(enemy.IMAGES_DEAD);
-            setTimeout(() => {
-              this.level.enemies.splice(index, 1);
-            }, 1000);
+            this.chickenKilled(enemy, index);
           }
         }
       });
     }
+  }
+
+  chickenKilled(enemy, index) {
+    clearInterval(enemy.moveLeftIntervall);
+            enemy.animate(enemy.IMAGES_DEAD);
+            enemy.speedY = - 10;
+            enemy.applyGravity();
+            setTimeout(() => {
+              this.level.enemies.splice(index, 1);
+            }, 1000);
   }
 
   hurtEndboss(enemy) {
@@ -105,8 +122,8 @@ class World {
 
   endbossDead(enemy) {
     if (this.hitEndboss == 0) {
-        clearInterval(enemy.moveLeftIntervall);
-        enemy.animateBossDead(enemy.IMAGES_DEAD);
+      clearInterval(enemy.moveLeftIntervall);
+      enemy.animateBossDead(enemy.IMAGES_DEAD);
       setTimeout(() => {
         this.level.endBoss.splice(0, 1);
         this.gameIsOver = true;

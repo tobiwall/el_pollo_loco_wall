@@ -8,6 +8,7 @@ class MovableObject extends DrawableObject {
   isCatchingCoin = false;
   lastHit = 0;
   moveLeftIntervall;
+  applyGravityInterval;
 
   jump() {
     this.speedY = 30;
@@ -32,12 +33,20 @@ class MovableObject extends DrawableObject {
   }
 
   applyGravity() {
-    setInterval(() => {
+    this.applyGravityInterval = setInterval(() => {
       if (this.isAboveGround() || this.speedY > 0) {
         this.y -= this.speedY;
         this.speedY -= this.acceleration;
       }
     }, 1000 / 25);
+    if (this instanceof Chicken || this instanceof ChickenSmall) {
+        setTimeout(() => {
+            setInterval(() => {
+                this.y -= this.speedY;
+                this.speedY -= this.acceleration;
+            }, 1000 / 60);
+        }, 500);
+    }
   }
 
   isAboveGround() {
