@@ -4,6 +4,14 @@ class Character extends MovableObject {
   speed = 10;
   lastCheckTime;
   lastPosition;
+  sawEndboss = false;
+
+  offset = {
+    top: 120,
+    bottom: 30,
+    left: 40,
+    rigth: 30
+  }
 
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
@@ -130,13 +138,12 @@ class Character extends MovableObject {
     this.loadImages(this.IMAGES_DEAD);
     this.loadImages(this.IMAGES_SLEEP);
     this.animateCharacter();
-    this.addLife();
     this.applyGravity();
   }
 
   checkCharacterAction() {
     if (this.isHurt() || this.isDead()) {
-        this.snorring_sound.pause();
+      this.snorring_sound.pause();
     } else {
       this.playAnimation(this.IMAGES_SLEEP);
       this.snorring_sound.volume = 0.1;
@@ -150,13 +157,18 @@ class Character extends MovableObject {
       this.checkKeyboard();
       this.world.camera_x = -this.x + 180;
     }, 1000 / 60);
-
     setInterval(() => {
       this.characterAction();
     }, 50);
   }
 
   checkKeyboard() {
+    this.checkKeyboardRightLeft();
+    this.sawEndbossAction();
+    this.checkKeyboardUp();
+  }
+
+  checkKeyboardRightLeft() {
     if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
       this.moveRight();
       this.otherDirection = false;
@@ -167,16 +179,23 @@ class Character extends MovableObject {
       this.otherDirection = true;
       this.walking_sound.play();
     }
+  }
+
+  sawEndbossAction() {
+    if (this.x >= 2000) {
+      this.sawEndboss = true;
+    }
+  }
+
+  checkKeyboardUp() {
     if (this.world.keyboard.UP && !this.isAboveGround()) {
       this.jump();
       this.jump_sound.play();
     }
-    if (this.world.keyboard.SPACE) {
-    }
   }
 
   characterAction() {
-    if (this.isDead()) {
+    if (this.isDead() && world.hitEndboss > 0) {
       this.characterDeadAction();
     } else if (this.isHurt()) {
       this.characterHurtAction();
@@ -192,6 +211,7 @@ class Character extends MovableObject {
       window.location.href = "index.html";
     }, 3000);
     this.playAnimation(this.IMAGES_DEAD);
+    this.speedY = 10;
     this.dead_sound.play();
     this.gameOver();
     BACKGROUND_MUSIK.pause();
@@ -221,12 +241,5 @@ class Character extends MovableObject {
     let timepassed = new Date().getTime() - this.lastHit;
     timepassed = timepassed / 1000;
     return timepassed < 0.5;
-  }
-
-  addLife() {
-    setInterval(() => {
-      if (this.isCatchingCoin) {
-      }
-    }, 1000);
   }
 }

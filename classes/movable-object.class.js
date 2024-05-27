@@ -10,16 +10,23 @@ class MovableObject extends DrawableObject {
   moveLeftIntervall;
   applyGravityInterval;
 
+  offset = {
+    top: 0,
+    bottom: 0,
+    left: 0,
+    rigth: 0
+  }
+
   jump() {
     this.speedY = 30;
   }
 
   isColliding(obj) {
     return (
-      this.x + this.width >= obj.x &&
-      this.x <= obj.x + obj.width &&
-      this.y + this.offsety + this.height >= obj.y &&
-      this.y + this.offsety <= obj.y + obj.height
+      this.x + this.width - obj.offset.rigth >= obj.x + obj.offset.left &&
+      this.x + obj.offset.left <= obj.x + obj.width - obj.offset.rigth &&
+      this.y + this.height - obj.offset.bottom >= obj.y + obj.offset.top &&
+      this.y + obj.offset.top <= obj.y + obj.height - obj.offset.bottom
     );
   }
 
@@ -33,13 +40,21 @@ class MovableObject extends DrawableObject {
   }
 
   applyGravity() {
+    this.gravityCharacter();
+    this.gravityChicken();
+  }
+
+  gravityCharacter() {
     this.applyGravityInterval = setInterval(() => {
-      if (this.isAboveGround() || this.speedY > 0) {
-        this.y -= this.speedY;
-        this.speedY -= this.acceleration;
-      }
-    }, 1000 / 25);
-    if (this instanceof Chicken || this instanceof ChickenSmall) {
+        if (this.isAboveGround() || this.speedY > 0) {
+          this.y -= this.speedY;
+          this.speedY -= this.acceleration;
+        }
+      }, 1000 / 25);
+  }
+
+  gravityChicken() {
+    if (this instanceof Chicken || this instanceof ChickenSmall || this instanceof Endboss) {
         setTimeout(() => {
             setInterval(() => {
                 this.y -= this.speedY;
@@ -78,18 +93,4 @@ class MovableObject extends DrawableObject {
         this.playAnimation(image);
     }, 100);
   }
-
-  /*drawFrame(ctx) {
-    if (
-      this instanceof Character ||
-      this instanceof Chicken ||
-      this instanceof ChickenSmall
-    ) {
-      ctx.beginPath();
-      ctx.lineWidth = "5";
-      ctx.strokeStyle = "blue";
-      ctx.rect(this.x, this.y, this.width, this.height);
-      ctx.stroke();
-    }
-  }*/
 }

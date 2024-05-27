@@ -48,12 +48,12 @@ class Statusbar extends DrawableObject {
     if (statusBar == "coins") {
       this.x = 10;
       this.y = 60;
-      this.setStatusBarCoins();
+      this.setStatusBarCoins(0);
     }
     if (statusBar == "bottle") {
       this.x = 10;
       this.y = 110;
-      this.setStatusBarBottle();
+      this.setStatusBarBottle(0);
     }
     if (statusBar == "endboss") {
       this.x = 10;
@@ -68,13 +68,13 @@ class Statusbar extends DrawableObject {
     this.img = this.imageCache[path];
   }
 
-  setStatusBarCoins() {
-    let path = this.IMAGE_COIN[0];
+  setStatusBarCoins(collectedCoins) {
+    let path = this.IMAGE_COIN[collectedCoins];
     this.img = this.imageCache[path];
   }
 
-  setStatusBarBottle() {
-    let path = this.IMAGE_bottle[0];
+  setStatusBarBottle(collectedBottles) {
+    let path = this.IMAGE_bottle[collectedBottles];
     this.img = this.imageCache[path];
   }
 

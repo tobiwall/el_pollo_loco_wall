@@ -1,8 +1,9 @@
 class ThrowableObject extends MovableObject {
   width = 80;
   height = 80;
+  bottleSplashAnimation;
 
-  sound_throw = new Audio('audio/throw.mp3');
+  sound_throw = new Audio("audio/throw.mp3");
 
   IMAGE_THROWABLE_BOTTLE = [
     "img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png",
@@ -47,15 +48,28 @@ class ThrowableObject extends MovableObject {
     this.speedY = 25;
     this.applyGravity();
     this.speedX(direction);
+    this.splashAnimation();
+  }
+
+  splashAnimation() {
+    this.bottleSplashAnimation = setInterval(() => {
+        if (this.y > 370) {
+          this.speedY = 0;
+          this.playAnimation(this.IMAGE_BOTTLE_SPLASH);
+          setTimeout(() => {
+              clearInterval(this.bottleSplashAnimation);
+          }, 1000);
+        }
+      }, 100);
   }
 
   speedX(direction) {
     setInterval(() => {
-        if (direction) {
-          this.x -= 8;
-        } else {
-          this.x += 8;
-        }
-      }, 25);
+      if (direction) {
+        this.x -= 8;
+      } else {
+        this.x += 8;
+      }
+    }, 25);
   }
 }
