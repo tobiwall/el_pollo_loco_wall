@@ -8,6 +8,10 @@ class Coin extends MovableObject {
         'img/8_coin/coin_2.png'
     ];
 
+    /**
+     * constructor()loads the images of coins
+     * 
+     */
     constructor() {
         super().loadImage('img/8_coin/coin_1.png');
         this.loadImages(this.IMAGES);
@@ -16,9 +20,11 @@ class Coin extends MovableObject {
         this.animate();
     }
 
+    /**
+     * animate() set the interval to animate zhe coins
+     * 
+     */
     animate() {
-        setInterval(() => {
-            this.playAnimation(this.IMAGES);
-        }, 300);
+        setInterval(() => this.playAnimation(this.IMAGES), 300);
       }
 }

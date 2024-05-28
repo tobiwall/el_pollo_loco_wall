@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="en" translate="no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>EL POLLO LOCO</title>
     <script src="./classes/world.class.js"></script>
     <script src="./classes/drawable-object.class.js"></script>
@@ -21,28 +21,70 @@
     <script src="./classes/throwable-object.class.js"></script>
     <script src="./levels/level1.js"></script>
     <script src="./classes/endscreen.class.js"></script>
+    <script src="./js/responsive.js"></script>
     <script src="./js/game.js"></script>
 
-    <link rel="stylesheet" href="./style.css">
-    <link rel="shortcut icon" href="img/2_character_pepe/1_idle/idle/I-1.png" type="image/x-icon">
-</head>
-<body>
-    
+    <link rel="stylesheet" href="./style.css" />
+    <link
+      rel="shortcut icon"
+      href="img/2_character_pepe/1_idle/idle/I-1.png"
+      type="image/x-icon"
+    />
+  </head>
+  <body onload="initStart()">
     <h1>El pollo loco</h1>
 
-    <div class="main-screen">
-        <div id="start-img">
-            <img src="./img/9_intro_outro_screens/start/startscreen_2.png" alt="">
-            <h2 onclick="init()" id="start-btn">START</h2>
-        </div>
-        <button onclick="stopAndPlayMusik()" class="volume-on"><img id="volume-on" src="./img/icons/volume-on.png" alt=""><img class="d-none" id="volume-off" src="./img/icons/volume-off.png" alt=""></button>
-        <canvas class="d-none" id="canvas" width="705" height="480">
-        <div id="end-screen" class="d-none">
-            <img src="./img/5_background/first_half_background.png" alt="">
-            <img src="./img/9_intro_outro_screens/game_over/game over.png" alt="">
-        </div>
+    <div id="main-screen" class="main-screen">
+      <div id="start-img"><h2 onclick="init()" id="start-btn">START</h2></div>
+      <div id="info-img" class="d-none">
+        <div>
+        <h2 onclick="closeInfo()" id="closeInfo-btn">INFO</h2>
+        <a onclick="window.location.href='datenschutz.html'" class="privacy blue">PRIVACY</a>
+        <a onclick="window.location.href='impressum.html'" class="impressum blue">IMPRESSUM</a>            
     </div>
-
-    </canvas>
-</body>
+        <div><a href=""></a></div>
+        <div class="description firstdescription">
+            <li>Arror Left = move Character left</li>
+            <li>Arror RIGHT = move Character right</li>
+            <li>Arror UP = jump with Character</li>
+            <li>D = throw Bottle</li>
+        </div>
+        <div class="description">
+            <li>To kill big and smal chicken you can jump on it, or throw a bottle</li>
+            <li>To get the bottles and coins you have to touch them</li>
+            <li>If you touch an enemy you lose a few percent of your life.</li>
+            <li>You can get more life, when you catch more coins then 100%</li>
+            <li>To kill the Endboss you need to throw Bottles on him</li>
+            <li>Seven seconds after you throw a Bottle, there will be more bottles to collect</li>
+        </div>
+      </div>
+      <img onclick="closeInfo()" class="info-btn" src="./img/icons/info.png" alt="" />
+      <button onclick="window.location.href='index.html'" class="home-btn">
+        <img id="home-btn" src="./img/icons/homeButton.png" alt="" />
+      </button>
+      <button onclick="stopAndPlayMusik()" class="volume-on">
+        <img id="volume-on" src="./img/icons/volume-on.png" alt="" />
+        <img class="d-none" id="volume-off" src="./img/icons/volume-off.png" alt=""/>
+    </button>
+      <button onclick="stopAndPlayMusik()" class="throw-btn" id="throw-btn">
+        <img src="./img/icons/throw.png" alt="" />
+      </button>
+      <button onclick="stopAndPlayMusik()" class="right-btn" id="right-btn">
+        <img src="./img/icons/rechts.png" alt="" />
+      </button>
+      <button onclick="stopAndPlayMusik()" class="left-btn" id="left-btn">
+        <img src="./img/icons/left.png" alt="" />
+      </button>
+      <button onclick="stopAndPlayMusik()" class="jump-btn" id="jump-btn">
+        <img src="./img/icons/jump.png" alt="" />
+      </button>
+      <canvas class="d-none" id="canvas" width="705" height="480">
+        <div id="end-screen" class="d-none">
+          <img src="./img/5_background/first_half_background.png" alt="" />
+          <img src="./img/9_intro_outro_screens/game_over/game over.png"alt=""/>
+        </div>
+      </canvas>
+    </div>
+    <img class="d-none rotate-phone" src="./img/icons/rotatePhone.png" alt="" />
+  </body>
 </html>

@@ -5,19 +5,27 @@ class Endscreen extends DrawableObject {
   height = 480;
   width = 705;
 
-  IMAGE_GAMEOVER = [
-    "img/9_intro_outro_screens/game_over/game over.png"
-  ];
-  IMAGE_WIN = [
-    "img/9_intro_outro_screens/win/win_2.png"
-  ];
+  IMAGE_GAMEOVER = ["img/9_intro_outro_screens/game_over/game over.png"];
+  IMAGE_WIN = ["img/9_intro_outro_screens/win/win_2.png"];
 
+  /**
+   * constructor() loads all images for the endscreen and calls the animate function
+   * 
+   * @param {this is the character} character 
+   * @param {this is the whole world} world 
+   */
   constructor(character, world) {
     super().loadImages(this.IMAGE_GAMEOVER);
     this.loadImages(this.IMAGE_WIN);
     this.animateEndscreen(character, world);
   }
 
+  /**
+   * animateEndscreen() animates the endscreen for win or lose
+   * 
+   * @param {this is the character} character 
+   * @param {this is the whole world} world 
+   */
   animateEndscreen(character, world) {
     setInterval(() => {
       let boss = world.hitEndboss;

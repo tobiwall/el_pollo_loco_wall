@@ -49,7 +49,7 @@ class World {
     this.colisionIntervall = setInterval(() => {
       this.checkColision();
       this.checkThrowObjects();
-    }, 100);
+    }, 60);
   }
 
   checkThrowObjects() {
@@ -75,66 +75,52 @@ class World {
       this.colisionCharacterEnemy(boss);
       this.colisionBottleEnemy(boss, 0);
     });
-    this.level.bottle.forEach((salsa, index) => {
-      this.colisionCharacterBottle(salsa, index);
-    });
-
-    this.level.coins.forEach((coin, index) => {
-      this.colisionCharacterCoin(coin, index);
-    });
+    this.level.bottle.forEach((salsa, index) => this.colisionCharacterBottle(salsa, index));
+    this.level.coins.forEach((coin, index) => this.colisionCharacterCoin(coin, index));
   }
 
   colisionCharacterCoin(coin, index) {
-    if (this.character.isColliding(coin) && this.character.isAboveGround()) {
+    if (this.character.isColliding(coin)) {
       this.COIN_SOUND.volume = 0.3;
-      this.COIN_SOUND.play();
+      if (!musikStoped) this.COIN_SOUND.play();
       this.level.coins.splice(index, 1);
       this.collectedCoins += 1;
       if (this.collectedCoins > 5) {
         this.collectedCoins = 5;
+        this.character.energy += 10;
+        this.statusbars[0].setStatusBarPercent(this.character.energy);
       }
       this.statusbars[1].setStatusBarCoins(this.collectedCoins);
     }
   }
 
   colisionCharacterBottle(salsa, index) {
-        this.collectingSalsa(salsa, index);
-  }
-
-  collectingSalsa(salsa, index) {
     if (this.character.isColliding(salsa)) {
       this.DING_SOUND.volume = 0.5;
-      this.DING_SOUND.play();
+      if (!musikStoped) this.DING_SOUND.play();
       this.level.bottle.splice(index, 1);
       this.collectedBottles += 1;
-      if (this.collectedBottles > 5) {
-        this.collectedBottles = 5;
-      }
+      if (this.collectedBottles > 5) this.collectedBottles = 5;
       this.statusbars[2].setStatusBarBottle(this.collectedBottles);
     }
   }
 
   colisionCharacterEnemy(enemy, index) {
     if (this.character.isColliding(enemy)) {
-      if (
-        this.character.isAboveGround() &&
-        this.character.speedY < 0 &&
-        !(enemy instanceof Endboss)
-      ) {
-        this.killChicken(enemy, index);
-      } else if (!this.killEnemy && this.hitEndboss > 0) {
-        this.hurtCharacter();
-      }
+      if (this.characterAttacksChicken(enemy)) this.killChicken(enemy, index);
+      else if (!this.killEnemy && this.hitEndboss > 0) this.hurtCharacter();
     }
+  }
+
+  characterAttacksChicken(enemy) {
+    return (this.character.isAboveGround() && this.character.speedY < 0 && !(enemy instanceof Endboss));
   }
 
   killChicken(enemy, index) {
     this.chickenKilled(enemy, index);
     this.character.speedY = 20;
     this.killEnemy = true;
-    setTimeout(() => {
-      this.killEnemy = false;
-    }, 1000);
+    setTimeout(() => (this.killEnemy = false), 1000);
   }
 
   hurtCharacter() {
@@ -149,9 +135,7 @@ class World {
           if (enemy instanceof Endboss) {
             this.hurtEndboss(enemy);
             this.endbossDead(enemy);
-          } else {
-            this.chickenKilled(enemy, index);
-          }
+          } else this.chickenKilled(enemy, index);
         }
       });
     }
@@ -159,13 +143,11 @@ class World {
 
   chickenKilled(enemy, index) {
     clearInterval(enemy.moveLeftIntervall);
-    this.SOUND_CHICKEN.play();
+    if (!musikStoped) this.SOUND_CHICKEN.play();
     enemy.animate(enemy.IMAGES_DEAD);
     enemy.speedY = -10;
     enemy.applyGravity();
-    setTimeout(() => {
-      this.level.enemies.splice(index, 1);
-    }, 1000);
+    setTimeout(() => this.level.enemies.splice(index, 1), 1000);
   }
 
   hurtEndboss(enemy) {
@@ -174,14 +156,11 @@ class World {
       this.hitEndboss -= 20;
       this.ENDBOSS_SOUND.pause();
       this.ENDBOSS_SOUND.currentTime = 2;
-      this.ENDBOSS_SOUND.play();
+      if (!musikStoped) this.ENDBOSS_SOUND.play();
       clearInterval(enemy.moveLeftIntervall);
       enemy.animate(enemy.IMAGES_HURT);
-      if (this.hitEndboss > 40) {
-        enemy.speed = 10;
-      } else {
-        enemy.speed = 20;
-      }
+      if (this.hitEndboss > 40) enemy.speed = 10;
+      else enemy.speed = 20;
       this.statusbars[3].setStatusBarEndboss(this.hitEndboss);
       this.createNewBottles();
     }
@@ -219,10 +198,8 @@ class World {
       this.level.endBoss.splice(0, 1);
       this.gameIsOver = true;
       this.ENDBOSS_SOUND.pause();
-      this.SOUND_WIN.play();
-      setTimeout(() => {
-        window.location.href = "index.html";
-      }, 7000);
+      if (!musikStoped) this.SOUND_WIN.play();
+      setTimeout(() => (window.location.href = "index.html"), 7000);
     }, 2000);
   }
 
@@ -250,24 +227,16 @@ class World {
   }
 
   drawStatusbar() {
-    if (!this.gameIsOver) {
-      this.statusbars.forEach((statusbar) => {
-        this.addToMap(statusbar);
-      });
-    }
+    if (!this.gameIsOver) this.statusbars.forEach((statusbar) => this.addToMap(statusbar));
   }
 
   drawEndscreen() {
-    if (this.gameIsOver) {
-      this.addToMap(this.endscreen);
-    }
+    if (this.gameIsOver) this.addToMap(this.endscreen);
   }
 
   repeadDraw() {
     let self = this;
-    requestAnimationFrame(function () {
-      self.draw();
-    });
+    requestAnimationFrame(() => self.draw());
   }
 
   clearAllIntervals() {
@@ -275,20 +244,13 @@ class World {
   }
 
   addObjectToMap(objects) {
-    objects.forEach((o) => {
-      this.addToMap(o);
-    });
+    objects.forEach((o) => this.addToMap(o));
   }
 
   addToMap(mo) {
-    if (mo.otherDirection) {
-      this.flipImage(mo);
-    }
+    if (mo.otherDirection) this.flipImage(mo);
     mo.draw(this.ctx);
-    //mo.drawFrame(this.ctx);
-    if (mo.otherDirection) {
-      this.flipImageBack(mo);
-    }
+    if (mo.otherDirection) this.flipImageBack(mo);
   }
 
   flipImage(mo) {
@@ -305,9 +267,7 @@ class World {
 
   setEndbossSpeed() {
     setInterval(() => {
-      if (this.character.sawEndboss && this.hitEndboss > 0) {
-        this.level.endBoss[0].speed = 10;
-      }
+      if (this.character.sawEndboss && this.hitEndboss > 0) this.level.endBoss[0].speed = 10;
     }, 500);
   }
 }

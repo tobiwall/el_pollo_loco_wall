@@ -1,9 +1,26 @@
 @font-face {
-    font-family: 'zabars';
-    src: url('fonts/ZABARS/zabars.ttf')  format('truetype'), /* Safari, Android, iOS */
+    font-family: "zabars";
+    src: url("fonts/ZABARS/zabars.ttf") format("truetype"); /* Safari, Android, iOS */
 }
 
+button {
+    display: none;
+}
 
+.info-btn {
+    display: flex;
+    position: absolute;
+    right: 12px;
+    top: 8px;
+}
+
+.info-btn:hover {
+    cursor: pointer;
+}
+
+button:hover {
+    cursor: pointer;
+}
 
 body {
     margin: 0;
@@ -11,11 +28,11 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-image: url('img/5_background/background-pixabay/body_background.jpg');
+    background-image: url("img/5_background/background-pixabay/body_background.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    font-family: 'zabars', Arial, Helvetica, sans-serif;
+    font-family: "zabars", Arial, Helvetica, sans-serif;
 }
 
 h1 {
@@ -33,10 +50,10 @@ h1 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-image: url('img/5_background/background-pixabay/frame.jpeg');
+    background-image: url("img/5_background/background-pixabay/frame.jpeg");
     background-repeat: no-repeat;
     background-size: cover;
-    background-color: rgb(251,146,72);
+    background-color: rgb(251, 146, 72);
 }
 
 canvas {
@@ -54,6 +71,17 @@ canvas {
     transform: translateX(-50%);
     cursor: pointer;
     font-size: 48px;
+    letter-spacing: 4px;
+}
+
+#closeInfo-btn {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    font-size: 48px;
+    letter-spacing: 4px;
 }
 
 #start-btn:hover {
@@ -62,50 +90,106 @@ canvas {
 
 #start-img {
     position: relative;
-    width: 705px;
-    height: 480px;
+    width: 83%;
+    height: 75%;
+    background-image: url("img/9_intro_outro_screens/start/startscreen_2.png");
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
-#start-img img {
-    width: 100%;
-    height: 100%;
+#info-img {
+    position: relative;
+    width: 83%;
+    height: 75%;
+    background-image: url("img/5_background/second_half_background.png");
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.home-btn {
+    right: 80px;
+    top: 16px;
+}
+
+.home-btn img {
+    height: 32px;
+    width: 32px;
+    object-fit: cover;
 }
 
 .volume-on {
-    position: absolute;
-    height: 48px;
-    width: 48px;
-    left: 13px;
-    top: 70px;
-    border-radius: 50%;
-    background-color: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+    right: 136px;
+    top: 16px;
 
-.volume-on:hover {
-    cursor: pointer;
 }
 
 .volume-on img {
     height: 32px;
     width: 32px;
     object-fit: cover;
-
 }
 
+.description {
+    margin: 36px;
+    font-size: 24px;
+    letter-spacing: 1px;
+}
 
+.firstdescription {
+    margin-top: 140px;
+}
 
+.blue {
+    position: absolute;
+    top: 24px;
+    color: blue;
+    font-size: 24px;
+    letter-spacing: 2px;
+}
 
+.blue:hover {
+    cursor: pointer;
+}
 
+.privacy {
+    left: 80px;
+}
+
+.impressum {
+    right: 80px;
+}
 
 @media only screen and (max-width: 856px) {
+    h1 {
+        display: none;
+    }
+
+    button {
+        height: 38px;
+        width: 38px;
+        position: absolute;
+        height: 48px;
+        width: 48px;
+        border-radius: 50%;
+        background-color: transparent;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    button img {
+        height: 28px;
+        width: 28px;
+    }
+
     .main-screen {
         width: 100%;
+        position: relative;
+        overflow: hidden;
         background-size: contain;
         justify-content: flex-start;
-        padding-top: 9.5%;
     }
 
     .main-screen background-image {
@@ -114,16 +198,111 @@ canvas {
 
     canvas {
         width: 82%;
+        display: block;
+        margin: 0 auto;
+        margin-top: 9.5%;
     }
 
-    @media only screen and (max-height: 480px) {
-        .main-screen {
-            height: 100%;
-            background-size: contain;
-        }
-
-        canvas {
-            height: 100%;
-        }
+    #start-img {
+        width: 82%;
+        margin: 0 auto;
+        margin-top: 9.5%;
     }
+
+    #info-img {
+        width: 82%;
+        margin: 0 auto;
+        margin-top: 9.5%;
+    }
+
+    #start-btn {
+        margin-top: 16px;
+    }
+
+    #closeInfo-btn {
+        margin-top: 16px;
+    }
+
+    .throw-btn {
+        left: 8px;
+        bottom: 8px;
+    }
+
+    .right-btn {
+        right: 8px;
+        bottom: 8px;
+    }
+
+    .left-btn {
+        right: 64px;
+        bottom: 8px;
+    }
+
+    .jump-btn {
+        right: 36px;
+        bottom: 56px;
+    }
+
+    .description {
+        margin: 24px 4px 24px 4px;
+        font-size: 16px;
+    }
+    
+    .firstdescription {
+        margin-top: 80px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    body {
+        justify-content: center;
+    }
+
+    .main-screen {
+        display: none;
+    }
+
+    .rotate-phone {
+        margin-top: 9.5%;
+        display: block;
+        opacity: 0.5;
+    }
+}
+
+@media only screen and (max-height: 800px) {
+    h1 {
+        display: none;
+    }
+
+}
+
+@media only screen and (max-height: 640px) {
+    .main-screen {
+        background-image: none;
+        background-color: transparent;
+    }
+
+    #start-img {
+        width: 100%;
+        height: 100%;
+        background-size: contain;
+        margin-top: 0;
+    }
+
+    #info-img {
+        width: 100%;
+        height: 100%;
+        background-size: contain;
+        margin-top: 0;
+    }
+
+    canvas {
+        width: 100%;
+        height: 100%;
+        margin-top: 0;
+    }
+}
+
+.d-block {
+    display: block;
 }

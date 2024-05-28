@@ -1,0 +1,44 @@
+@font-face {
+    font-family: "zabars";
+    src: url("fonts/ZABARS/zabars.ttf") format("truetype"); /* Safari, Android, iOS */
+}
+
+body {
+    margin: 48px;
+    background-image: url('img/5_background/background-pixabay/body_background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: "zabars", Arial, Helvetica, sans-serif;
+    letter-spacing: 1px;
+}
+
+h1 {
+    font-size: 80px;
+    letter-spacing: 4px;
+}
+
+h2 {
+    font-size: 48px;
+}
+
+p {
+    font-size: 24px;
+}
+
+li {
+    font-size: 24px;
+}
+
+a {
+    font-size: 24px;
+    text-decoration: none;
+}
+
+.blue {
+    color: blue;
+    margin-left: 48px;
+}
+
+.blue:hover {
+    cursor: pointer;
+}

@@ -18,26 +18,27 @@ class Bottle extends MovableObject {
     super().loadImage("img/6_salsa_bottle/1_salsa_bottle_on_ground.png");
     this.loadImages(this.IMAGES_BOTTLE_GROUND);
     this.loadImages(this.IMAGES_BOTTLE_AIR);
-    if (position == "ground") {
-        this.x = 200 + Math.random() * 2000;
-        this.y = 370;
-        this.animateBottleGround();
-    } else {
-        this.x = 200 + Math.random() * 2000;
-        this.y = 30 + Math.random() * 100;
-        this.animateBottleAir();
-    }
+    if (position == "ground") this.animateBottleGround();
+    else this.animateBottleAir();
   }
 
+  /**
+   * animateBottleGround set the animation intervall of the bottles on the ground
+   * 
+   */
   animateBottleGround() {
-    setInterval(() => {
-      this.playAnimation(this.IMAGES_BOTTLE_GROUND);
-    }, 1000);
+    this.x = 200 + Math.random() * 2000;
+    this.y = 370;
+    setInterval(() => this.playAnimation(this.IMAGES_BOTTLE_GROUND), 1000);
   }
 
+  /**
+   * animateBottleAir set the animation intervall of the bottles in the air
+   * 
+   */
   animateBottleAir() {
-    setInterval(() => {
-        this.playAnimation(this.IMAGES_BOTTLE_AIR);
-      }, 200);
+    this.x = 200 + Math.random() * 2000;
+    this.y = 30 + Math.random() * 100;
+    setInterval(() => this.playAnimation(this.IMAGES_BOTTLE_AIR), 200);
   }
 }

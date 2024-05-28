@@ -8,10 +8,10 @@ class Character extends MovableObject {
 
   offset = {
     top: 120,
-    bottom: 30,
-    left: 40,
-    rigth: 30
-  }
+    bottom: 20,
+    left: 30,
+    right: 40,
+  };
 
   IMAGES_WALKING = [
     "img/2_character_pepe/2_walk/W-21.png",
@@ -141,102 +141,144 @@ class Character extends MovableObject {
     this.applyGravity();
   }
 
+  /**
+   * checkCharacterAction() checks the situation of character to set sleep or not
+   * 
+   */
   checkCharacterAction() {
-    if (this.isHurt() || this.isDead()) {
-      this.snorring_sound.pause();
-    } else {
+    if (this.isHurt() || this.isDead()) this.snorring_sound.pause();
+    else {
       this.playAnimation(this.IMAGES_SLEEP);
       this.snorring_sound.volume = 0.1;
-      this.snorring_sound.play();
+      if (!musikStoped) this.snorring_sound.play();
     }
   }
 
+  /**
+   * animateCharacter() sets the Interval to move the background if Pepe is walking
+   * it sets the interval for calling characterAction()
+   * 
+   */
   animateCharacter() {
     setInterval(() => {
       this.walking_sound.pause();
       this.checkKeyboard();
       this.world.camera_x = -this.x + 180;
     }, 1000 / 60);
-    setInterval(() => {
-      this.characterAction();
-    }, 50);
+    setInterval(() => this.characterAction(), 50);
   }
 
+  /**
+   * checkKeyboard() calls the functions to check the keyboard action
+   * it checks if Pepe was near the Endboss
+   * 
+   */
   checkKeyboard() {
     this.checkKeyboardRightLeft();
     this.sawEndbossAction();
     this.checkKeyboardUp();
   }
 
+  /**
+   * checkKeyboardRightLeft() checks the keyboard right and left to move Pepe right or left
+   * 
+   */
   checkKeyboardRightLeft() {
     if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
       this.moveRight();
       this.otherDirection = false;
-      this.walking_sound.play();
+      if (!musikStoped) this.walking_sound.play();
     }
     if (this.world.keyboard.LEFT && this.x > -520) {
       this.moveLeft();
       this.otherDirection = true;
-      this.walking_sound.play();
+      if (!musikStoped) this.walking_sound.play();
     }
   }
 
+  /**
+   * sawEndbossAction() checks, if Pepe was near Endboss
+   * 
+   */
   sawEndbossAction() {
-    if (this.x >= 2000) {
-      this.sawEndboss = true;
-    }
+    if (this.x >= 2000) this.sawEndboss = true;
   }
 
+  /**
+   * checkKeyboardUp() checks the Keayboard up to jump
+   * 
+   */
   checkKeyboardUp() {
     if (this.world.keyboard.UP && !this.isAboveGround()) {
       this.jump();
-      this.jump_sound.play();
+      if (!musikStoped) this.jump_sound.play();
     }
   }
 
+  /**
+   * characterAction() calls the right animate functions for each situation
+   * 
+   */
   characterAction() {
-    if (this.isDead() && world.hitEndboss > 0) {
-      this.characterDeadAction();
-    } else if (this.isHurt()) {
-      this.characterHurtAction();
-    } else if (this.isAboveGround()) {
-      this.playAnimation(this.IMAGES_JUMPING);
-    } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+    if (this.isDead() && world.hitEndboss > 0) this.characterDeadAction();
+    else if (this.isHurt()) this.characterHurtAction();
+    else if (this.isAboveGround()) this.playAnimation(this.IMAGES_JUMPING);
+    else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT)
       this.playAnimation(this.IMAGES_WALKING);
-    }
   }
 
+  /**
+   * characterDeadAction() ends the game and calls all animations for it
+   * 
+   */
   characterDeadAction() {
     setTimeout(() => {
-      window.location.href = "index.html";
-    }, 3000);
+      this.y -= this.speedY;
+      this.speedY -= this.acceleration;
+    }, 700);
     this.playAnimation(this.IMAGES_DEAD);
-    this.speedY = 10;
-    this.dead_sound.play();
-    this.gameOver();
     BACKGROUND_MUSIK.pause();
+    if (!musikStoped) this.dead_sound.play();
+    this.gameOver();
+    setTimeout(() => (window.location.href = "index.html"), 3000);
   }
 
+  /**
+   * characterHurtAction() plays the animation if Pepe is hurt
+   * 
+   */
   characterHurtAction() {
     this.playAnimation(this.IMAGES_HURT);
     this.hurt_sound.volume = 0.2;
-    this.hurt_sound.play();
+    if (!musikStoped) this.hurt_sound.play();
   }
 
+  /**
+   * isDead() checks if Pepe has energy
+   * 
+   * @returns right or false
+   */
   isDead() {
     return this.energy == 0;
   }
 
+  /**
+   * gameOver() ends the game and all intervals
+   * 
+   */
   gameOver() {
     setTimeout(() => {
       this.world.gameIsOver = true;
       this.walking_sound.pause();
-      setTimeout(() => {
-        this.world.clearAllIntervals();
-      }, 2000);
+      setTimeout(() => this.world.clearAllIntervals(), 2000);
     }, 1400);
   }
 
+  /**
+   * isHurt()checks the time Pepe was hurt
+   * 
+   * @returns true or false
+   */
   isHurt() {
     let timepassed = new Date().getTime() - this.lastHit;
     timepassed = timepassed / 1000;
