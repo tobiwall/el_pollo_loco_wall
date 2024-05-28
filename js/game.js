@@ -19,6 +19,10 @@ let lastKeyPressTime = Date.now();
 let lastButtonPress = Date.now();
 let stopAudioIntervall;
 
+/**
+ * initStart() starts the start screen
+ * 
+ */
 function initStart() {
   let canvas = document.getElementById("canvas");
   if (canvas.classList.contains("d-none")) {
@@ -27,6 +31,10 @@ function initStart() {
   }
 }
 
+/**
+ * init() starts the game
+ * 
+ */
 function init() {
   gameStarted = true;
   document.getElementById("start-img").classList.add("d-none");
@@ -39,6 +47,10 @@ function init() {
   checkMobileButtonPress();
 }
 
+/**
+ * checkWidthForButton() checks in the intervall the width to show button in mobile version
+ * 
+ */
 function checkWidthForButton() {
   setInterval(() => {
     if (window.innerWidth < 856) showButtons();
@@ -46,6 +58,10 @@ function checkWidthForButton() {
   }, 100);
 }
 
+/**
+ * showButtons() shows the buttons on mobile version
+ * 
+ */
 function showButtons() {
   if (!canvas.classList.contains("d-none"))
     buttons.forEach((button) => {
@@ -54,6 +70,10 @@ function showButtons() {
     });
 }
 
+/**
+ * hideButtons() hides the buttons if the screen is not mobile
+ * 
+ */
 function hideButtons() {
   buttons.forEach((button) => {
         button.classList.remove("d-block");
@@ -61,6 +81,12 @@ function hideButtons() {
       });
 }
 
+/**
+ * playBackgroundMusik() play the backgroundmusik and start again
+ * 
+ * @param {volume for the begining} vol1 
+ * @param {volume for the ending} vol2 
+ */
 function playBackgroundMusik(vol1, vol2) {
   BACKGROUND_MUSIK.volume = vol1;
   BACKGROUND_MUSIK.currentTime = 0;
@@ -73,6 +99,10 @@ function playBackgroundMusik(vol1, vol2) {
   }, 100);
 }
 
+/**
+ * stopAndPlayMusik() stops or play the all sounds if button clicked
+ * 
+ */
 function stopAndPlayMusik() {
   let on = document.getElementById("volume-on");
   let off = document.getElementById("volume-off");
@@ -83,6 +113,12 @@ function stopAndPlayMusik() {
   }
 }
 
+/**
+ * playMusik() turns all sounds on again
+ * 
+ * @param {*} on 
+ * @param {*} off 
+ */
 function playMusik(on, off) {
   off.classList.add("d-none");
     on.classList.remove("d-none");
@@ -90,6 +126,12 @@ function playMusik(on, off) {
     playBackgroundMusik(backgroundMusikVolumen, reducedVolumen);
 }
 
+/**
+ * stopMusik() stops all sounds
+ * 
+ * @param {*} on 
+ * @param {*} off 
+ */
 function stopMusik(on, off) {
   BACKGROUND_MUSIK.pause();
     on.classList.add("d-none");
@@ -97,11 +139,21 @@ function stopMusik(on, off) {
     musikStoped = true;
 }
 
+/**
+ * reduceVolumen() reduces the volumen on 21sec, because the song is getting louder
+ * 
+ * @param {*} vol2 
+ */
 function reduceVolumen(vol2) {
   BACKGROUND_MUSIK.volume = vol2;
   changeVolumenOn21sec = true;
 }
 
+/**
+ * startAgainMusik() restarts the background musik
+ * 
+ * @param {*} vol1 
+ */
 function startAgainMusik(vol1) {
   clearInterval(fadeInterval);
   changeVolumenOn21sec = false;
@@ -109,6 +161,11 @@ function startAgainMusik(vol1) {
   if (!musikStoped) BACKGROUND_MUSIK.play();
 }
 
+/**
+ * musikCurrenttimeStart() for restarting from beginning
+ * 
+ * @param {*} vol1 
+ */
 function musikCurrenttimeStart(vol1) {
   BACKGROUND_MUSIK.currentTime = 0;
   BACKGROUND_MUSIK.volume = vol1;
@@ -117,11 +174,14 @@ function musikCurrenttimeStart(vol1) {
   fadingStarted = false;
 }
 
+/**
+ * startVolumeFade() fades the musik to get a better restart
+ * 
+ */
 function startVolumeFade() {
   const fadeSteps = fadeDuration * 10;
   const fadeStepDuration = (fadeDuration * 1000) / fadeSteps;
   const fadeStep = BACKGROUND_MUSIK.volume / fadeSteps;
-
   clearInterval(fadeInterval);
   fadeInterval = setInterval(() => {
     if (BACKGROUND_MUSIK.volume > 0) BACKGROUND_MUSIK.volume = Math.max(0, BACKGROUND_MUSIK.volume - fadeStep);
@@ -130,8 +190,10 @@ function startVolumeFade() {
   fadingStarted = true;
 }
 
-
-
+/**
+ * addEventListener for pressing keyboard
+ * 
+ */
 window.addEventListener("keydown", (e) => {
   let key = e.keyCode;
   lastKeyPressTime = Date.now();
@@ -143,6 +205,10 @@ window.addEventListener("keydown", (e) => {
   if (key == 68) keyboard.D = true;
 });
 
+/**
+ * addEventListener for ending press keyboard
+ * 
+ */
 window.addEventListener("keyup", (e) => {
   let key = e.keyCode;
   if (key == 37) keyboard.LEFT = false;
@@ -153,6 +219,10 @@ window.addEventListener("keyup", (e) => {
   if (key == 68) keyboard.D = false;
 });
 
+/**
+ * checkMobileButtonPress
+ * 
+ */
 function checkMobileButtonPress() {
   const handleTouchStart = (e, key) => {
     if (e.cancelable) e.preventDefault();
@@ -166,6 +236,12 @@ function checkMobileButtonPress() {
   checkButtonTouch(handleTouchStart, handleTouchEnd);
 }
 
+/**
+ * checkButtonTouch
+ * 
+ * @param {*} handleTouchStart 
+ * @param {*} handleTouchEnd 
+ */
 function checkButtonTouch(handleTouchStart, handleTouchEnd) {
   document.getElementById('throw-btn').addEventListener('touchstart', (e) => handleTouchStart(e, 'D'));
   document.getElementById('throw-btn').addEventListener('touchend', (e) => handleTouchEnd(e, 'D'));
@@ -177,30 +253,67 @@ function checkButtonTouch(handleTouchStart, handleTouchEnd) {
   document.getElementById('jump-btn').addEventListener('touchend', (e) => handleTouchEnd(e, 'UP'));
 }
 
+/**
+ * checkKeyPress() checks the time the character moves to handle the sleeping
+ * 
+ */
 function checkKeyPress() {
   let currentTime = Date.now();
   if (currentTime - lastKeyPressTime < 5000 || currentTime - lastButtonPress < 5000) world.character.snorring_sound.pause();
   else world.character.checkCharacterAction();
 }
 
+/**
+ * closeInfo() opens and closes the info screen
+ * 
+ */
 function closeInfo() {
   let infoImg = document.getElementById('info-img');
   let startImg = document.getElementById('start-img');
   let canvas = document.getElementById('canvas');
-  if (!infoOpen) {
+  if (!infoOpen) open(infoImg, startImg, canvas);
+  else if (gameStarted) closeFromGame(infoImg, startImg, canvas)
+  else closeFromStartScreen(infoImg, startImg, canvas);
+}
+
+/**
+ * open() opens the info screen
+ * 
+ * @param {*} infoImg 
+ * @param {*} startImg 
+ * @param {*} canvas 
+ */
+function open(infoImg, startImg, canvas) {
   infoImg.classList.remove('d-none');
   startImg.classList.add('d-none')
   canvas.classList.add('d-none');
   infoOpen = true;
-  } else if (gameStarted) {
-    infoImg.classList.add('d-none');
+}
+
+/**
+ * closeFromGame() closes the info from Game
+ * 
+ * @param {*} infoImg 
+ * @param {*} startImg 
+ * @param {*} canvas 
+ */
+function closeFromGame(infoImg, startImg, canvas) {
+  infoImg.classList.add('d-none');
     startImg.classList.add('d-none')
     canvas.classList.remove('d-none');
     infoOpen = false;
-  } else {
-    infoImg.classList.add('d-none');
+}
+
+/**
+ * closeFromStartScreen() closes the info screen from start screen
+ * 
+ * @param {*} infoImg 
+ * @param {*} startImg 
+ * @param {*} canvas 
+ */
+function closeFromStartScreen(infoImg, startImg, canvas) {
+  infoImg.classList.add('d-none');
     startImg.classList.remove('d-none')
     canvas.classList.add('d-none');
     infoOpen = false;
-  }
 }
