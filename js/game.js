@@ -36,6 +36,7 @@ function initStart() {
  * 
  */
 function init() {
+  createLevel1();
   gameStarted = true;
   document.getElementById("start-img").classList.add("d-none");
   document.getElementById("canvas").classList.remove("d-none");
@@ -53,7 +54,7 @@ function init() {
  */
 function checkWidthForButton() {
   setInterval(() => {
-    if (window.innerWidth < 856) showButtons();
+    if (window.innerWidth < 1190) showButtons();
     else hideButtons();
   }, 100);
 }
@@ -133,6 +134,8 @@ function playMusik(on, off) {
  * @param {*} off 
  */
 function stopMusik(on, off) {
+  world.character.snorring_sound.pause();
+  world.ENDBOSS_SOUND.pause();
   BACKGROUND_MUSIK.pause();
     on.classList.add("d-none");
     off.classList.remove("d-none");
@@ -259,6 +262,11 @@ function checkButtonTouch(handleTouchStart, handleTouchEnd) {
  */
 function checkKeyPress() {
   let currentTime = Date.now();
+  if (currentTime - lastKeyPressTime > 500 || currentTime - lastButtonPress > 500) {
+    if (currentTime - lastKeyPressTime < 5000 || currentTime - lastButtonPress < 5000) {
+      world.character.checkCharacterIdle();
+    }
+  }
   if (currentTime - lastKeyPressTime < 5000 || currentTime - lastButtonPress < 5000) world.character.snorring_sound.pause();
   else world.character.checkCharacterAction();
 }

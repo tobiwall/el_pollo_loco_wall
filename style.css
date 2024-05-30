@@ -111,6 +111,9 @@ canvas {
 .home-btn {
     right: 80px;
     top: 16px;
+    position: absolute;
+    height: 48px;
+    width: 48px;
 }
 
 .home-btn img {
@@ -120,15 +123,15 @@ canvas {
 }
 
 .volume-on {
+    position: absolute;
     right: 136px;
     top: 16px;
-
+    height: 48px;
+    width: 48px;
 }
 
-.volume-on img {
-    height: 32px;
-    width: 32px;
-    object-fit: cover;
+.volume-on:hover {
+    cursor: pointer;
 }
 
 .description {
@@ -143,7 +146,7 @@ canvas {
 
 .blue {
     position: absolute;
-    top: 24px;
+    top: 48px;
     color: blue;
     font-size: 24px;
     letter-spacing: 2px;
@@ -161,11 +164,27 @@ canvas {
     right: 80px;
 }
 
-@media only screen and (max-width: 856px) {
-    h1 {
-        display: none;
+@media only screen and (max-width: 1190px) {
+    .throw-btn {
+        left: 8px;
+        bottom: 8px;
     }
 
+    .right-btn {
+        right: 8px;
+        bottom: 8px;
+    }
+
+    .left-btn {
+        right: 64px;
+        bottom: 8px;
+    }
+
+    .jump-btn {
+        right: 36px;
+        bottom: 56px;
+    }
+    
     button {
         height: 38px;
         width: 38px;
@@ -182,6 +201,13 @@ canvas {
     button img {
         height: 28px;
         width: 28px;
+    }
+
+}
+
+@media only screen and (max-width: 856px) {
+    h1 {
+        display: none;
     }
 
     .main-screen {
@@ -223,26 +249,6 @@ canvas {
         margin-top: 16px;
     }
 
-    .throw-btn {
-        left: 8px;
-        bottom: 8px;
-    }
-
-    .right-btn {
-        right: 8px;
-        bottom: 8px;
-    }
-
-    .left-btn {
-        right: 64px;
-        bottom: 8px;
-    }
-
-    .jump-btn {
-        right: 36px;
-        bottom: 56px;
-    }
-
     .description {
         margin: 24px 4px 24px 4px;
         font-size: 16px;
@@ -250,6 +256,32 @@ canvas {
     
     .firstdescription {
         margin-top: 80px;
+    }
+
+    .volume-on {
+        top: 8px;
+        width: 32px;
+        height: 32px;
+    }
+
+    .info-btn {
+        top: 4px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .home-btn {
+        padding: 0;
+        padding-top: 1px;
+        top: 8px;
+        width: 32px;
+        height: 32px;
+        border: none;
+    }
+
+    .home-btn img {
+        width: 32px;
+        height: 32px;
     }
 }
 

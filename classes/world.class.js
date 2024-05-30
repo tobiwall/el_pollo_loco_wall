@@ -1,8 +1,8 @@
 class World {
   character = new Character();
   statusbars = [];
-  level = level1;
   hitEndboss = 100;
+  level = level1;
   endscreen = new Endscreen(this.character, this);
   throwableObject = [];
   SOUND_WIN = new Audio("audio/win.mp3");
@@ -22,6 +22,9 @@ class World {
   collectedBottles = 0;
   collectedCoins = 0;
   newBottles = false;
+  throwTime = true;
+  pepeSawBoss = false;
+  endbossAttacks = false;
 
   /**
    * constructor() set the parameters and calls the functions to draw the whole game
@@ -67,7 +70,7 @@ class World {
     this.colisionIntervall = setInterval(() => {
       this.checkColision();
       this.checkThrowObjects();
-    }, 60);
+    }, 1000/60);
   }
 
   /**
@@ -75,7 +78,9 @@ class World {
    * 
    */
   checkThrowObjects() {
-    if (this.keyboard.D && this.collectedBottles > 0) {
+    if (this.keyboard.D && this.collectedBottles > 0 && this.throwTime) {
+      this.throwTime = false;
+      setTimeout(() => this.throwTime = true, 1000);
       this.collectedBottles -= 1;
       this.statusbars[2].setStatusBarBottle(this.collectedBottles);
       this.bottleHit = false;
@@ -231,17 +236,38 @@ class World {
     if (!this.bottleHit) {
       this.bottleHit = true;
       this.hitEndboss -= 20;
-      this.ENDBOSS_SOUND.pause();
-      this.ENDBOSS_SOUND.currentTime = 2;
-      if (!musikStoped) this.ENDBOSS_SOUND.play();
-      clearInterval(enemy.moveLeftIntervall);
-      enemy.animate(enemy.IMAGES_HURT);
+    }
+    if (!this.bottleHit || this.pepeSawBoss) this.playAttackEndboss(enemy);
+}
+
+/**
+ * playAttackEndboss() starts the attack of the endboss and sets the speed
+ * 
+ * @param {*} enemy 
+ */
+playAttackEndboss(enemy) {
+  if (!this.endbossAttacks) this.setEndbossAttack(enemy);
+    if (!this.level.endBoss[0].otherDirection) {
       if (this.hitEndboss > 40) enemy.speed = 10;
       else enemy.speed = 20;
-      this.statusbars[3].setStatusBarEndboss(this.hitEndboss);
-      this.createNewBottles();
     }
-  }
+    this.statusbars[3].setStatusBarEndboss(this.hitEndboss);
+    this.createNewBottles();
+    if (!musikStoped) this.ENDBOSS_SOUND.play();
+}
+
+/**
+ * setEndbossAttack() sets the musik and animation for angry enemy
+ * 
+ * @param {*} enemy 
+ */
+setEndbossAttack(enemy) {
+  this.ENDBOSS_SOUND.pause();
+  this.ENDBOSS_SOUND.currentTime = 2;
+  clearInterval(enemy.moveLeftIntervall);
+  enemy.animate(enemy.IMAGES_HURT);
+  this.endbossAttacks = true;
+}
 
   /**
    * createNewBottles after thrown them on endboss
@@ -391,7 +417,10 @@ class World {
    */
   setEndbossSpeed() {
     setInterval(() => {
-      if (this.character.sawEndboss && this.hitEndboss > 0) this.level.endBoss[0].speed = 10;
+      if (this.character.sawEndboss && this.hitEndboss > 0) {
+        this.pepeSawBoss = true;
+        this.hurtEndboss(this.level.endBoss[0]);
+      }
     }, 500);
   }
 }
