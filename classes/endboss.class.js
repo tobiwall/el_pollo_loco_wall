@@ -2,7 +2,6 @@ class Endboss extends MovableObject {
   width = 350;
   height = 400;
   y = 70;
-  animateBossDeadIntervall;
 
   IMAGES_WALKING = [
     'img/4_enemie_boss_chicken/1_walk/G1.png',
@@ -55,7 +54,8 @@ class Endboss extends MovableObject {
    * @param {the right image Array of the situation} image 
    */
   animateBossDead(image) {
-    this.animateBossDeadIntervall = setInterval(() => this.playAnimation(image), 300);
+    this.currentImage = 0;
+      this.playAnimationDeadEndboss(image);
   }
 
   /**

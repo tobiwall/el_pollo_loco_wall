@@ -25,6 +25,8 @@ class World {
   throwTime = true;
   pepeSawBoss = false;
   endbossAttacks = false;
+  endbossSpeedIntervall;
+  deadBossInterval = false;
 
   /**
    * constructor() set the parameters and calls the functions to draw the whole game
@@ -233,12 +235,20 @@ class World {
    * @param {*} enemy 
    */
   hurtEndboss(enemy) {
+    enemy.speed = 10;
     if (!this.bottleHit) {
+      clearInterval(this.endbossSpeedIntervall);
       this.bottleHit = true;
       this.hitEndboss -= 20;
+      this.playAttackEndboss(enemy);
     }
-    if (!this.bottleHit || this.pepeSawBoss) this.playAttackEndboss(enemy);
-}
+  }
+
+  playWalkEndboss(enemy) {
+    clearInterval(enemy.moveLeftIntervall);
+    enemy.animate(enemy.IMAGES_WALKING);
+    enemy.speed = 10;
+  }
 
 /**
  * playAttackEndboss() starts the attack of the endboss and sets the speed
@@ -246,7 +256,9 @@ class World {
  * @param {*} enemy 
  */
 playAttackEndboss(enemy) {
-  if (!this.endbossAttacks) this.setEndbossAttack(enemy);
+  if (this.hitEndboss > 0) {
+    this.setEndbossAttack(enemy);
+  } 
     if (!this.level.endBoss[0].otherDirection) {
       if (this.hitEndboss > 40) enemy.speed = 10;
       else enemy.speed = 20;
@@ -265,7 +277,11 @@ setEndbossAttack(enemy) {
   this.ENDBOSS_SOUND.pause();
   this.ENDBOSS_SOUND.currentTime = 2;
   clearInterval(enemy.moveLeftIntervall);
-  enemy.animate(enemy.IMAGES_HURT);
+  if (this.hitEndboss > 0) enemy.animate(enemy.IMAGES_HURT);
+  setTimeout(() => {
+    clearInterval(enemy.moveLeftIntervall);
+    enemy.animate(enemy.IMAGES_WALKING);
+  }, 1000);
   this.endbossAttacks = true;
 }
 
@@ -290,8 +306,10 @@ setEndbossAttack(enemy) {
    */
   endbossDead(enemy) {
     if (this.hitEndboss == 0) {
+      if (!this.deadBossInterval) {
       this.intervallBossDead(enemy);
       this.timeoutWinAnimation();
+      }
     }
   }
 
@@ -301,6 +319,7 @@ setEndbossAttack(enemy) {
    * @param {*} enemy 
    */
   intervallBossDead(enemy) {
+    this.deadBossInterval = true;
     clearInterval(enemy.moveLeftIntervall);
     enemy.animateBossDead(enemy.IMAGES_DEAD);
     setTimeout(() => {
@@ -320,7 +339,6 @@ setEndbossAttack(enemy) {
       this.gameIsOver = true;
       this.ENDBOSS_SOUND.pause();
       if (!musikStoped) this.SOUND_WIN.play();
-      setTimeout(() => (window.location.href = "index.html"), 7000);
     }, 2000);
   }
 
@@ -351,7 +369,9 @@ setEndbossAttack(enemy) {
       this.addObjectToMap(this.level.bottle);
       this.addObjectToMap(this.throwableObject);
       this.addObjectToMap(this.level.enemies);
-      this.addObjectToMap(this.level.endBoss);
+      if (this.level.endBoss != 0) {
+        this.addObjectToMap(this.level.endBoss);
+      }
     }
   }
 
@@ -416,10 +436,10 @@ setEndbossAttack(enemy) {
    * setEndbossSpeed() starts to move the endboss if the character was near
    */
   setEndbossSpeed() {
-    setInterval(() => {
+    this.endbossSpeedIntervall = setInterval(() => {
       if (this.character.sawEndboss && this.hitEndboss > 0) {
         this.pepeSawBoss = true;
-        this.hurtEndboss(this.level.endBoss[0]);
+        this.playWalkEndboss(this.level.endBoss[0]);
       }
     }, 500);
   }

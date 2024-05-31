@@ -109,6 +109,19 @@ class MovableObject extends DrawableObject {
     this.currentImage++;
   }
 
+  playAnimationDeadEndboss(images) {
+    setTimeout(() => {
+      world.level.endBoss.splice(0, 1);
+    }, 1200)
+    let animateBossDeadIntervall = setInterval(() => {
+    let path = images[this.currentImage];
+    this.img = this.imageCache[path];
+    if (this.currentImage > 3) {
+      this.currentImage = 3;
+    } else this.currentImage++;
+    }, 333)
+  }
+
   /**
    * moveRight() adds the speed to x to move right
    * 

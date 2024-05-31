@@ -38,13 +38,14 @@ function initStart() {
 function init() {
   createLevel1();
   gameStarted = true;
+  document.getElementById('home-btn').classList.add('d-none');
   document.getElementById("start-img").classList.add("d-none");
   document.getElementById("canvas").classList.remove("d-none");
   if (!musikStoped) playBackgroundMusik(backgroundMusikVolumen, reducedVolumen);
   canvas = document.getElementById("canvas");
   checkWidthForButton();
   world = new World(canvas, keyboard);
-  setTimeout(() => setInterval(() => checkKeyPress(), 1000), 5000);
+  setTimeout(() => setInterval(() => checkKeyPress(), 500), 1000);
   checkMobileButtonPress();
 }
 
@@ -262,13 +263,15 @@ function checkButtonTouch(handleTouchStart, handleTouchEnd) {
  */
 function checkKeyPress() {
   let currentTime = Date.now();
-  if (currentTime - lastKeyPressTime > 500 || currentTime - lastButtonPress > 500) {
-    if (currentTime - lastKeyPressTime < 5000 || currentTime - lastButtonPress < 5000) {
-      world.character.checkCharacterIdle();
+  if (world.character.y <= 175) {
+    if (currentTime - lastKeyPressTime > 500 || currentTime - lastButtonPress > 500) {
+      if (currentTime - lastKeyPressTime < 5000 || currentTime - lastButtonPress < 5000) {
+        world.character.checkCharacterIdle();
+      }
     }
+    if (currentTime - lastKeyPressTime < 5000 || currentTime - lastButtonPress < 5000) world.character.snorring_sound.pause();
+    else world.character.checkCharacterAction();
   }
-  if (currentTime - lastKeyPressTime < 5000 || currentTime - lastButtonPress < 5000) world.character.snorring_sound.pause();
-  else world.character.checkCharacterAction();
 }
 
 /**

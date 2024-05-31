@@ -249,7 +249,7 @@ class Character extends MovableObject {
     else if (this.isHurt()) this.characterHurtAction();
     else if (this.isAboveGround()) {
       this.playAnimation(this.IMAGES_JUMPING);
-      if (this.speedY > 0) {
+      if (this.speedY > -10) {
         if (this.currentImage > 3) this.currentImage = 3;
       } else {
         if (this.currentImage > 8) this.currentImage = 8;
@@ -272,7 +272,6 @@ class Character extends MovableObject {
     BACKGROUND_MUSIK.pause();
     if (!musikStoped) this.dead_sound.play();
     this.gameOver();
-    setTimeout(() => (window.location.href = "index.html"), 3000);
   }
 
   /**

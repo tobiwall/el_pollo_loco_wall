@@ -27,14 +27,17 @@ class Endscreen extends DrawableObject {
    * @param {this is the whole world} world 
    */
   animateEndscreen(character, world) {
+    let restartbtn = document.getElementById('home-btn');
     setInterval(() => {
       let boss = world.hitEndboss;
       if (character.energy == 0) {
         let path = this.IMAGE_GAMEOVER;
         this.img = this.imageCache[path];
+        restartbtn.classList.remove('d-none');
       } else if (boss <= 0) {
         let path = this.IMAGE_WIN;
         this.img = this.imageCache[path];
+        restartbtn.classList.remove('d-none');
       }
     }, 1000 / 60);
   }

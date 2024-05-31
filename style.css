@@ -116,6 +116,10 @@ canvas {
     width: 48px;
 }
 
+.home-btn:hover {
+    cursor: pointer;
+}
+
 .home-btn img {
     height: 32px;
     width: 32px;
